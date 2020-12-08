@@ -1,0 +1,12 @@
+.log{
+    margin: 2rem;
+    height: 40px;
+    width: 80px;
+    background: #ff851a;
+    font-family: Arial, serif bold;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
