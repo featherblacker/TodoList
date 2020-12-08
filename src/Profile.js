@@ -8,7 +8,7 @@ const Profile = () => {
     const Initial = () => {
         isLoading = false;
     }
-    useEffect(() => Initial, []);
+    useEffect(() => Initial(), []);
     if (isLoading) {
         return <div>Loading ...</div>;
     }

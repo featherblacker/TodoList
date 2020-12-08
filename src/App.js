@@ -5,6 +5,7 @@ import React, {useEffect, useState} from "react";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
 import Profile from "./Profile";
+import {useAuth0} from "@auth0/auth0-react";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
     const [status, setStatus] = useState("all");
     const [filteredTodos, setFilteredTodos] = useState([]);
 
+    let {user, isAuthenticated} = useAuth0();
 
     const filterHandler = () => {
         switch (status) {
@@ -29,13 +31,22 @@ function App() {
     }
 
     const saveLocalTodos = () => {
-        localStorage.setItem('todos', JSON.stringify(todos))
+        if (isAuthenticated) {
+            localStorage.setItem(user.name, JSON.stringify(todos))
+        } else {
+            localStorage.setItem('todos', JSON.stringify(todos))
+        }
     }
 
     const getLocalTodos = () => {
-        if (localStorage.getItem('todos')) {
+        if (isAuthenticated) {
+            let todosLocal = JSON.parse(localStorage.getItem(user.name));
+            setTodos(todosLocal);
+            console.log(true)
+        } else if (localStorage.getItem('todos')) {
             let todosLocal = JSON.parse(localStorage.getItem('todos'));
             setTodos(todosLocal);
+            console.log("load")
         } else {
             localStorage.setItem('todos', JSON.stringify([]))
         }
@@ -48,6 +59,10 @@ function App() {
             saveLocalTodos();
         }, [todos, status]
     )
+
+    useEffect(() => {
+        getLocalTodos();
+    }, [isAuthenticated])
 
     return (
         <div className="App">
